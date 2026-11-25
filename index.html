@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusLoop - Student Marketplace</title>
+
+  <!-- Load Tailwind styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { serif: ["Georgia", "Times New Roman", "serif"] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Small custom animations for a smooth feel. */
+    body { transition: background-color .3s ease, color .3s ease; }
+    .product-card { animation: appear .35s ease both; transition: transform .25s ease, box-shadow .25s ease; }
+    .product-card:hover { transform: translateY(-5px); }
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-serif">
+
+  <!-- Navigation bar -->
+  <header class="sticky top-0 z-20 border-b border-slate-200 bg-sky-50/95 dark:border-slate-800 dark:bg-slate-900/95 backdrop-blur">
+    <div class="mx-auto flex min-h-16 w-[92%] max-w-6xl items-center gap-3 flex-wrap py-2">
+      <a href="#" class="mr-auto text-2xl font-bold">Campus<span class="text-orange-500">Loop</span></a>
+
+      <nav class="hidden gap-5 text-slate-600 dark:text-slate-300 md:flex">
+        <a href="#market" class="hover:text-orange-500">Shop</a>
+        <a href="#how" class="hover:text-orange-500">How it works</a>
+        <a href="#about" class="hover:text-orange-500">About</a>
+      </nav>
+
+      <div class="flex w-full gap-2 sm:w-auto">
+        <button id="themeBtn" aria-label="Switch to dark theme" title="Switch theme" class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-xl hover:bg-sky-100 dark:border-slate-700 dark:hover:bg-slate-800 sm:flex-none">☾</button>
+        <button id="loginBtn" class="flex-1 rounded-lg border border-slate-300 px-3 py-2 hover:bg-sky-100 dark:border-slate-700 dark:hover:bg-slate-800 sm:flex-none">Log in</button>
+        <button id="cartBtn" class="flex-1 rounded-lg bg-sky-200 px-3 py-2 text-slate-900 hover:bg-sky-300 dark:bg-blue-900 dark:text-white dark:hover:bg-blue-800 sm:flex-none">Cart (0)</button>
+        <button id="sellBtn" class="flex-1 rounded-lg bg-orange-500 px-3 py-2 text-white hover:bg-orange-600 sm:flex-none">Sell item</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Welcome section -->
+    <section class="bg-gradient-to-br from-sky-50 to-white py-16 dark:from-slate-900 dark:to-slate-950 sm:py-20">
+      <div class="mx-auto w-[92%] max-w-6xl">
+        <p class="font-bold tracking-widest text-orange-500">THE STUDENT MARKETPLACE</p>
+        <h1 class="my-3 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">
+          Buy smart. <span class="text-orange-500">Sell easily.</span> Reuse more.
+        </h1>
+        <p class="mb-6 max-w-2xl text-lg leading-7 text-slate-600 dark:text-slate-300">
+          Find books, electronics, stationery and more. Sell things you no longer need and connect with other students.
+        </p>
+        <a href="#market" class="inline-block rounded-lg bg-orange-500 px-5 py-3 text-white transition hover:-translate-y-1 hover:bg-orange-600">Explore products</a>
+      </div>
+    </section>
+
+    <!-- Engineering branch shortcuts -->
+    <section class="mx-auto w-[92%] max-w-6xl py-10">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="font-bold tracking-widest text-orange-500">MADE FOR CAMPUS LIFE</p>
+          <h2 class="mt-1 text-3xl font-bold">Shop by engineering branch</h2>
+          <p class="mt-2 text-slate-600 dark:text-slate-400">Find notes, books, tools and supplies for your course.</p>
+        </div>
+        <a href="#market" class="font-bold text-orange-500 hover:underline">View all items →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <button data-branch="CSE" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">💻</span><span class="mt-2 block font-bold">CSE</span><span class="text-xs text-slate-500 dark:text-slate-400">Computer Science</span>
+        </button>
+        <button data-branch="Mechanical" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">⚙️</span><span class="mt-2 block font-bold">Mechanical</span><span class="text-xs text-slate-500 dark:text-slate-400">Machines & design</span>
+        </button>
+        <button data-branch="Civil" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">🏗️</span><span class="mt-2 block font-bold">Civil</span><span class="text-xs text-slate-500 dark:text-slate-400">Building & drawing</span>
+        </button>
+        <button data-branch="ECE" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">🔌</span><span class="mt-2 block font-bold">ECE</span><span class="text-xs text-slate-500 dark:text-slate-400">Electronics</span>
+        </button>
+        <button data-branch="Electrical" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">⚡</span><span class="mt-2 block font-bold">Electrical</span><span class="text-xs text-slate-500 dark:text-slate-400">Power & circuits</span>
+        </button>
+        <button data-branch="Other" class="branch-shortcut rounded-xl border border-slate-200 bg-sky-50 p-4 text-left transition hover:-translate-y-1 hover:border-orange-400 dark:border-slate-800 dark:bg-slate-900">
+          <span class="text-2xl">📚</span><span class="mt-2 block font-bold">Other</span><span class="text-xs text-slate-500 dark:text-slate-400">All other courses</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick highlights -->
+    <section class="bg-slate-900 py-9 text-white dark:bg-black">
+      <div class="mx-auto grid w-[92%] max-w-6xl grid-cols-1 gap-6 text-center sm:grid-cols-3">
+        <div><p class="text-3xl font-bold text-orange-400">One campus</p><p class="mt-1 text-sm text-slate-300">A marketplace made for students</p></div>
+        <div><p class="text-3xl font-bold text-orange-400">Every branch</p><p class="mt-1 text-sm text-slate-300">Find course-related study essentials</p></div>
+        <div><p class="text-3xl font-bold text-orange-400">Reuse more</p><p class="mt-1 text-sm text-slate-300">Give useful items a second life</p></div>
+      </div>
+    </section>
+
+    <!-- Seller invitation -->
+    <section class="mx-auto w-[92%] max-w-6xl py-10">
+      <div class="flex flex-col items-start justify-between gap-5 rounded-2xl border border-orange-200 bg-orange-50 p-6 dark:border-orange-900 dark:bg-slate-900 sm:flex-row sm:items-center sm:p-8">
+        <div>
+          <p class="font-bold tracking-widest text-orange-500">GOT SOMETHING TO SELL?</p>
+          <h2 class="mt-1 text-2xl font-bold sm:text-3xl">Turn unused items into someone else's essentials.</h2>
+          <p class="mt-2 text-slate-600 dark:text-slate-300">List your books, lab tools, notes and more for fellow students.</p>
+        </div>
+        <button id="homeSellBtn" class="shrink-0 rounded-lg bg-orange-500 px-5 py-3 text-white transition hover:-translate-y-1 hover:bg-orange-600">Start selling</button>
+      </div>
+    </section>
+
+    <!-- Product search and filters -->
+    <section id="market" class="mx-auto w-[92%] max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">Explore products</h2>
+      <p class="mt-2 text-slate-500 dark:text-slate-400">Search and filter to find what you need.</p>
+
+      <div class="my-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <input id="search" type="search" placeholder="Search products..." aria-label="Search products" class="rounded-lg border border-slate-300 bg-white p-3 outline-none focus:border-orange-500 dark:border-slate-700 dark:bg-slate-900">
+        <select id="category" aria-label="Category" class="rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+          <option value="all">All categories</option>
+          <option>Books</option><option>Electronics</option><option>Stationery</option><option>Clothing</option><option>Other</option>
+        </select>
+        <select id="branch" aria-label="Engineering branch" class="rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+          <option value="all">All branches</option>
+          <option value="CSE">CSE</option><option value="Mechanical">Mechanical</option>
+          <option value="Civil">Civil</option><option value="ECE">ECE</option>
+          <option value="Electrical">Electrical</option><option value="IT">IT</option><option value="Other">Other</option>
+        </select>
+        <select id="price" aria-label="Price filter" class="rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+          <option value="all">Any price</option><option value="low">Under ₹500</option>
+          <option value="mid">₹500 - ₹2,000</option><option value="high">Above ₹2,000</option>
+        </select>
+        <select id="sort" aria-label="Sort products" class="rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+          <option value="new">Newest</option><option value="cheap">Price: low to high</option>
+          <option value="costly">Price: high to low</option><option value="rating">Top rated</option>
+        </select>
+      </div>
+
+      <div id="productList" aria-live="polite" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </section>
+
+    <!-- Three simple steps -->
+    <section id="how" class="border-y border-slate-200 bg-sky-50 py-12 dark:border-slate-800 dark:bg-slate-900">
+      <div class="mx-auto w-[92%] max-w-6xl">
+        <h2 class="mb-5 text-3xl font-bold">How it works</h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <article class="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-950">
+            <h3 class="mb-2 text-xl font-bold">1. Create an account</h3>
+            <p class="text-slate-600 dark:text-slate-400">Choose to buy, sell, or do both.</p>
+          </article>
+          <article class="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-950">
+            <h3 class="mb-2 text-xl font-bold">2. Shop or list items</h3>
+            <p class="text-slate-600 dark:text-slate-400">Browse products or add your own listing.</p>
+          </article>
+          <article class="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-950">
+            <h3 class="mb-2 text-xl font-bold">3. Connect safely</h3>
+            <p class="text-slate-600 dark:text-slate-400">Arrange exchanges in a public place.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="mx-auto w-[92%] max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">About CampusLoop</h2>
+      <p class="mt-3 text-slate-600 dark:text-slate-400">A student marketplace to buy and sell useful items.</p>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 py-6 text-center text-slate-500 dark:border-slate-800 dark:text-slate-400">
+    © <span id="year"></span> CampusLoop
+  </footer>
+
+  <!-- Popup window for forms and cart -->
+  <div id="shade" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 p-4">
+    <div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 text-slate-800 shadow-2xl dark:bg-slate-900 dark:text-slate-100" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="mb-4 flex items-center justify-between">
+        <h2 id="modalTitle" class="text-2xl font-bold">Window</h2>
+        <button id="closeBtn" aria-label="Close" class="rounded-lg px-3 py-1 text-2xl hover:bg-slate-100 dark:hover:bg-slate-800">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 left-1/2 z-50 hidden -translate-x-1/2 rounded-lg bg-slate-900 px-5 py-3 text-white shadow-lg"></div>
+
+  <script>
+    "use strict";
+
+    // A short helper to get an HTML element by its ID.
+    const get = (id) => document.getElementById(id);
+
+    // Read and save information in this browser.
+    function load(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+      catch { return fallback; }
+    }
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    // Starting products shown when the page is opened for the first time.
+    let products = load("cl_products", [
+      { id: "1", title: "Study books bundle", description: "Useful books for college subjects.", category: "Books", branch: "CSE", price: 350, rating: 4.5, created: 3 },
+      { id: "2", title: "Scientific calculator", description: "A handy calculator for classes and exams.", category: "Electronics", branch: "Mechanical", price: 650, rating: 4.8, created: 2 },
+      { id: "3", title: "Notebook pack", description: "A pack of clean ruled notebooks.", category: "Stationery", branch: "Civil", price: 180, rating: 4.2, created: 1 }
+    ]);
+
+    let users = load("cl_users", []);
+    let cart = load("cl_cart", []);
+    let user = load("cl_user", null);
+
+    // Escape user text before placing it inside product HTML.
+    function safe(text) {
+      return String(text).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    // Show a small message at the bottom of the screen.
+    function notify(message) {
+      get("toast").textContent = message;
+      get("toast").classList.remove("hidden");
+      setTimeout(() => get("toast").classList.add("hidden"), 2400);
+    }
+
+    // Open and close the popup window.
+    function modal(title, html) {
+      get("modalTitle").textContent = title;
+      get("modalBody").innerHTML = html;
+      get("shade").classList.remove("hidden");
+      get("shade").classList.add("flex");
+    }
+    function closeModal() {
+      get("shade").classList.add("hidden");
+      get("shade").classList.remove("flex");
+    }
+    get("closeBtn").onclick = closeModal;
+    get("shade").onclick = (event) => {
+      if (event.target === get("shade")) closeModal();
+    };
+    document.onkeydown = (event) => {
+      if (event.key === "Escape") closeModal();
+    };
+
+    // Start with the light theme and remember the selected theme.
+    function setTheme(dark) {
+      document.documentElement.classList.toggle("dark", dark);
+      get("themeBtn").textContent = dark ? "☀" : "☾";
+      get("themeBtn").setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+      save("cl_theme", dark);
+    }
+    setTheme(load("cl_theme", false));
+    get("themeBtn").onclick = () => {
+      setTheme(!document.documentElement.classList.contains("dark"));
+    };
+
+    // Display products after search, filters and sorting are applied.
+    function showProducts() {
+      const word = get("search").value.toLowerCase();
+      const category = get("category").value;
+      const branch = get("branch").value;
+      const price = get("price").value;
+      const sort = get("sort").value;
+
+      let list = products.filter(product => {
+        const matchesText = (product.title + product.description).toLowerCase().includes(word);
+        const matchesCategory = category === "all" || product.category === category;
+        const matchesBranch = branch === "all" || product.branch === branch;
+        const matchesPrice = price === "all" ||
+          (price === "low" && product.price < 500) ||
+          (price === "mid" && product.price >= 500 && product.price <= 2000) ||
+          (price === "high" && product.price > 2000);
+        return matchesText && matchesCategory && matchesBranch && matchesPrice;
+      });
+
+      if (sort === "cheap") list.sort((a, b) => a.price - b.price);
+      if (sort === "costly") list.sort((a, b) => b.price - a.price);
+      if (sort === "rating") list.sort((a, b) => b.rating - a.rating);
+      if (sort === "new") list.sort((a, b) => b.created - a.created);
+
+      // Build one product card for each matching product.
+      get("productList").innerHTML = list.length ? list.map(product => `
+        <article class="product-card overflow-hidden rounded-xl border border-slate-200 bg-sky-50 shadow-md dark:border-slate-800 dark:bg-slate-900">
+          <div class="grid h-44 place-items-center bg-sky-100 text-5xl dark:bg-slate-800">🛍️</div>
+          <div class="p-4">
+            <div class="flex items-center justify-between gap-2 text-sm">
+              <span class="text-slate-500 dark:text-slate-400">${safe(product.category)} · ${safe(product.branch || "Other")}</span>
+              <span class="text-amber-500">★ ${Number(product.rating).toFixed(1)}</span>
+            </div>
+            <h3 class="my-2 text-xl font-bold">${safe(product.title)}</h3>
+            <p class="mb-4 min-h-10 leading-6 text-slate-600 dark:text-slate-400">${safe(product.description)}</p>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xl font-bold text-orange-500">₹${Number(product.price).toLocaleString("en-IN")}</span>
+              <span class="text-sm text-slate-500 dark:text-slate-400">Seller item</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button class="flex-1 rounded-lg bg-sky-200 px-3 py-2 text-slate-900 hover:bg-sky-300 dark:bg-blue-900 dark:text-white dark:hover:bg-blue-800" data-add="${safe(product.id)}">Add to cart</button>
+              <button class="rounded-lg border border-slate-300 px-4 py-2 hover:bg-white dark:border-slate-700 dark:hover:bg-slate-800" data-rate="${safe(product.id)}">Rate</button>
+            </div>
+          </div>
+        </article>
+      `).join("") : '<p class="col-span-full py-8 text-center text-slate-500">No products found. Try another filter.</p>';
+    }
+
+    // Update the product list when a filter changes.
+    ["search", "category", "branch", "price", "sort"].forEach(id => {
+      get(id).addEventListener(id === "search" ? "input" : "change", showProducts);
+    });
+
+    // Let a student choose a branch quickly from the home page.
+    document.querySelectorAll(".branch-shortcut").forEach(button => {
+      button.onclick = () => {
+        get("branch").value = button.dataset.branch;
+        showProducts();
+        get("market").scrollIntoView({ behavior: "smooth" });
+      };
+    });
+
+    // The home page selling button opens the same seller flow.
+    get("homeSellBtn").onclick = () => get("sellBtn").click();
+
+    // Show the sign-up or log-in form.
+    function accountForm(signup) {
+      modal(signup ? "Create account" : "Log in", `
+        <form id="accountForm" class="space-y-3">
+          ${signup ? `
+            <div><label class="mb-1 block font-bold">Your name</label><input name="name" maxlength="50" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+            <div><label class="mb-1 block font-bold">Account type</label><select name="type" class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"><option value="buyer">Buy items</option><option value="seller">Sell items</option><option value="both">Buy and sell</option></select></div>
+          ` : ""}
+          <div><label class="mb-1 block font-bold">Email</label><input name="email" type="email" maxlength="254" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+          <div><label class="mb-1 block font-bold">Password</label><input name="password" type="password" minlength="8" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+          <button class="w-full rounded-lg bg-orange-500 px-4 py-3 text-white hover:bg-orange-600">${signup ? "Sign up" : "Log in"}</button>
+          <p class="text-sm text-slate-500">${signup ? "Already registered?" : "New here?"}
+            <a href="#" id="switch" class="text-orange-500 underline">${signup ? "Log in" : "Sign up"}</a>
+          </p>
+        </form>
+      `);
+
+      get("switch").onclick = (event) => {
+        event.preventDefault();
+        accountForm(!signup);
+      };
+
+      get("accountForm").onsubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        const email = String(data.get("email")).trim().toLowerCase();
+        const password = String(data.get("password"));
+
+        // Make a password digest before saving it in this browser.
+        const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(password));
+        const hash = Array.from(new Uint8Array(bytes))
+          .map(byte => byte.toString(16).padStart(2, "0")).join("");
+
+        if (signup) {
+          if (users.some(item => item.email === email)) return notify("Email already registered.");
+          user = {
+            name: String(data.get("name")).trim(),
+            email: email,
+            type: data.get("type")
+          };
+          users.push({ ...user, hash: hash });
+          save("cl_users", users);
+        } else {
+          const found = users.find(item => item.email === email && item.hash === hash);
+          if (!found) return notify("Email or password is incorrect.");
+          user = { name: found.name, email: found.email, type: found.type };
+        }
+
+        save("cl_user", user);
+        updateButtons();
+        closeModal();
+        notify("You are logged in.");
+      };
+    }
+
+    // Change the account button and cart count.
+    function updateButtons() {
+      get("loginBtn").textContent = user ? "Log out" : "Log in";
+      get("cartBtn").textContent = `Cart (${cart.length})`;
+    }
+
+    get("loginBtn").onclick = () => {
+      if (user) {
+        user = null;
+        save("cl_user", null);
+        updateButtons();
+        notify("Logged out.");
+      } else {
+        accountForm(false);
+      }
+    };
+
+    // Open the form used by sellers to add a product.
+    get("sellBtn").onclick = () => {
+      if (!user) return accountForm(true);
+      if (user.type === "buyer") return notify("Your account is set to buying only.");
+
+      modal("Sell an item", `
+        <form id="sellForm" class="space-y-3">
+          <div><label class="mb-1 block font-bold">Product name</label><input name="title" maxlength="70" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+          <div><label class="mb-1 block font-bold">Description</label><textarea name="description" maxlength="300" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></textarea></div>
+          <div><label class="mb-1 block font-bold">Category</label><select name="category" class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"><option>Books</option><option>Electronics</option><option>Stationery</option><option>Clothing</option><option>Other</option></select></div>
+          <div><label class="mb-1 block font-bold">Engineering branch</label><select name="branch" class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"><option value="CSE">CSE</option><option value="Mechanical">Mechanical</option><option value="Civil">Civil</option><option value="ECE">ECE</option><option value="Electrical">Electrical</option><option value="IT">IT</option><option value="Other">Other / All branches</option></select></div>
+          <div><label class="mb-1 block font-bold">Price (₹)</label><input name="price" type="number" min="1" max="1000000" required class="w-full rounded-lg border border-slate-300 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"></div>
+          <button class="w-full rounded-lg bg-orange-500 px-4 py-3 text-white hover:bg-orange-600">Publish item</button>
+        </form>
+      `);
+
+      get("sellForm").onsubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        products.push({
+          id: crypto.randomUUID(),
+          title: String(data.get("title")).trim(),
+          description: String(data.get("description")).trim(),
+          category: data.get("category"),
+          branch: data.get("branch"),
+          price: Number(data.get("price")),
+          rating: 0,
+          created: Date.now()
+        });
+        save("cl_products", products);
+        showProducts();
+        closeModal();
+        notify("Your item has been added.");
+      };
+    };
+
+    // Handle the Add to cart and Rate buttons inside product cards.
+    get("productList").onclick = (event) => {
+      const addButton = event.target.closest("[data-add]");
+      const rateButton = event.target.closest("[data-rate]");
+
+      if (addButton) {
+        cart.push(addButton.dataset.add);
+        save("cl_cart", cart);
+        updateButtons();
+        notify("Added to cart.");
+      }
+
+      if (rateButton) {
+        const product = products.find(item => item.id === rateButton.dataset.rate);
+        const score = Number(prompt("Give this product a rating from 1 to 5:"));
+        if (product && score >= 1 && score <= 5) {
+          product.rating = product.rating ? (product.rating + score) / 2 : score;
+          save("cl_products", products);
+          showProducts();
+          notify("Thanks for rating!");
+        }
+      }
+    };
+
+    // Display the cart items and their total price.
+    get("cartBtn").onclick = () => {
+      const items = cart.map(id => products.find(product => product.id === id)).filter(Boolean);
+      const total = items.reduce((sum, product) => sum + product.price, 0);
+
+      modal("Your cart", `
+        ${items.length ? items.map(product => `<p class="my-2">${safe(product.title)} — ₹${product.price}</p>`).join("") : "<p>Your cart is empty.</p>"}
+        <h3 class="my-4 text-xl font-bold">Total: ₹${total.toLocaleString("en-IN")}</h3>
+        <button id="clearCart" class="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600">Clear cart</button>
+      `);
+
+      get("clearCart").onclick = () => {
+        cart = [];
+        save("cl_cart", cart);
+        updateButtons();
+        closeModal();
+        notify("Cart cleared.");
+      };
+    };
+
+    // Show the current year and load the first set of products.
+    get("year").textContent = new Date().getFullYear();
+    updateButtons();
+    showProducts();
+  </script>
+</body>
+</html>
